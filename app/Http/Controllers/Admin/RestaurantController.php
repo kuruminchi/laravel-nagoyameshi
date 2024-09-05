@@ -129,7 +129,7 @@ class RestaurantController extends Controller
         
         $restaurant->update();
 
-        return to_route('admin.restaurants.index')->with('flash_message', '店舗を編集しました。');
+        return to_route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
 
     /**

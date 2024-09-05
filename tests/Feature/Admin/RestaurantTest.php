@@ -37,6 +37,8 @@ class RestaurantTest extends TestCase
     {
         $adminUser = Admin::factory()->create();
 
+        // メモ：actingAsの第二引数は認証用でどのguardを使うか指定することができる。
+        // これがないとテストエラーになった。
         $response = $this->actingAs($adminUser, 'admin')->get(route('admin.restaurants.index'));
 
         $response->assertStatus(200);
@@ -265,21 +267,21 @@ class RestaurantTest extends TestCase
         $old_details = Restaurant::factory()->create();
 
         $new_details = [
-            'name' => 'テスト',
-            'description' => 'テスト',
-            'lowest_price' => 1000,
-            'highest_price' => 5000,
-            'postal_code' => '0000000',
-            'address' => 'テスト',
-            'opening_time' => '10:00:00',
-            'closing_time' => '20:00:00',
-            'seating_capacity' => 50 
+            'name' => '新テスト',
+            'description' => '新テスト',
+            'lowest_price' => 2000,
+            'highest_price' => 10000,
+            'postal_code' => '1110000',
+            'address' => '新テスト',
+            'opening_time' => '09:00:00',
+            'closing_time' => '21:00:00',
+            'seating_capacity' => 100 
         ];
 
         $response = $this->actingAs($adminUser, 'admin')->patch(route('admin.restaurants.update', $old_details), $new_details);
 
         $this->assertDatabaseHas('restaurants', $new_details);
-        $response->assertRedirect(route('admin.restaurants.index'));
+        $response->assertRedirect(route('admin.restaurants.show', $old_details));
     }
 
 
