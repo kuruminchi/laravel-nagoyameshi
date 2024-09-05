@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
-use App\models\Admin;
+use App\Models\Admin;
 
 class AdminUserTest extends TestCase
 {

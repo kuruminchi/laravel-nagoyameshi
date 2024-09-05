@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
 
     Route::get('users', [Admin\UserController::class, 'index'])->name('users.index');
-
     Route::get('users/{user}', [Admin\UserController::class, 'show'])->name('users.show');
+
+    Route::get('restaurants', [Admin\RestaurantController::class, 'index'])->name('restaurants.index');
+    Route::get('restaurants/create', [Admin\RestaurantController::class, 'create'])->name('restaurants.create');
+    Route::post('restaurants', [Admin\RestaurantController::class, 'store'])->name('restaurants.store');
+    Route::get('restaurants/{restaurant}', [Admin\RestaurantController::class, 'show'])->name('restaurants.show');
+    Route::get('restaurants/{restaurant}/edit', [Admin\RestaurantController::class, 'edit'])->name('restaurants.edit');
+    Route::patch('restaurants/{restaurant}', [Admin\RestaurantController::class, 'update'])->name('restaurants.update');
+    Route::delete('restaurants/{restaurant}', [Admin\RestaurantController::class, 'destroy'])->name('restaurants.destroy');
 });
