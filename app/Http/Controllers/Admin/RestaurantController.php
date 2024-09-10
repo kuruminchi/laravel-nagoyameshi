@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Restaurant;
+use App\Models\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,9 @@ class RestaurantController extends Controller
      */
     public function create()
     {
-        return view('admin.restaurants.create');
+        $categories = Category::all();
+
+        return view('admin.restaurants.create', compact('categories'));
     }
 
     /**
@@ -72,6 +75,11 @@ class RestaurantController extends Controller
         
         $restaurant->save();
 
+        // メモ：array_filter=セレクトボックスで選択なしにした場合(value='')は空文字を取り除く関数
+        // メモ：sync=同期させる意味があり、データの追加と削除を同時に行ってくれます。このメゾットを使う時点でデータベースへの保存は完了しているのでsave()は不要
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
+
         return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。');
     }
 
@@ -88,7 +96,10 @@ class RestaurantController extends Controller
      */
     public function edit(Restaurant $restaurant)
     {
-        return view('admin.restaurants.edit', compact('restaurant'));
+        $categories = Category::all();
+        // メモ：コレクションを配列に変換するtoArray()メゾットとpluck('id')を合わせることでカラムの値のみを配列化したデータを取得できます。
+        $category_ids = $restaurant->categories->pluck('id')->toArray();
+        return view('admin.restaurants.edit', compact('restaurant', 'categories', 'category_ids'));
     }
 
     /**
@@ -128,6 +139,9 @@ class RestaurantController extends Controller
         }
         
         $restaurant->update();
+
+        $category_ids = array_filter($request->input('category_ids'));
+        $restaurant->categories()->sync($category_ids);
 
         return to_route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
     }
