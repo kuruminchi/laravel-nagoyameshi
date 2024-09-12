@@ -54,7 +54,7 @@ class RestaurantController extends Controller
             'address' => 'required',
             'opening_time' => 'required|before:closing_time',
             'closing_time' => 'required|after:opening_time',
-            'seating_capacity' => 'required|numeric|min:0' 
+            'seating_capacity' => 'required|numeric|min:0'
         ]);
 
         $restaurant = new Restaurant();
@@ -82,7 +82,7 @@ class RestaurantController extends Controller
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
 
-        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
+        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids', []));
         $restaurant->regular_holidays()->sync($regular_holiday_ids);
 
         return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。');
@@ -152,7 +152,7 @@ class RestaurantController extends Controller
         $category_ids = array_filter($request->input('category_ids'));
         $restaurant->categories()->sync($category_ids);
 
-        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids'));
+        $regular_holiday_ids = array_filter($request->input('regular_holiday_ids', []));
         $restaurant->regular_holidays()->sync($regular_holiday_ids);
 
         return to_route('admin.restaurants.show', $restaurant)->with('flash_message', '店舗を編集しました。');
