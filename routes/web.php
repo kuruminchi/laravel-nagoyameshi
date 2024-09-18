@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\TermController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,4 +44,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::post('categories', [Admin\CategoryController::class, 'store'])->name('categories.store');
     Route::patch('categories/{category}', [Admin\CategoryController::class, 'update'])->name('categories.update');
     Route::delete('categories/{category}', [Admin\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    Route::get('company', [Admin\CompanyController::class, 'index'])->name('company.index');
+    Route::get('company/{company}/edit', [Admin\CompanyController::class, 'edit'])->name('company.edit');
+    Route::patch('company/{company}', [Admin\CompanyController::class, 'update'])->name('company.update');
+
+    Route::get('terms', [Admin\TermController::class, 'index'])->name('terms.index');
+    Route::get('terms/{term}/edit', [Admin\TermController::class, 'edit'])->name('terms.edit');
+    Route::patch('terms/{term}', [Admin\TermController::class, 'update'])->name('terms.update');
 });
