@@ -25,6 +25,7 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
+// 管理者用ルート
 // prefix->URLの先頭　as->名前付きルートの先頭の設定ができます。グループ内のルートURLがadmin/home, 名前付きルートがadmin.homeになります。
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
