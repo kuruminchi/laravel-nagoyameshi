@@ -36,6 +36,7 @@ class CompanyTest extends TestCase
     public function test_adminUser_can_access_admin_company_index()
     {
         $adminUser = Admin::factory()->create();
+        $company = Company::factory()->create();
 
         $response = $this->actingAs($adminUser, 'admin')->get(route('admin.company.index'));
 

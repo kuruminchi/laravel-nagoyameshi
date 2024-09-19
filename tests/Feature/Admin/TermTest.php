@@ -36,6 +36,7 @@ class TermTest extends TestCase
     public function test_adminUser_can_access_admin_terms_index()
     {
         $adminUser = Admin::factory()->create();
+        $terms = Term::factory()->create();
 
         $response = $this->actingAs($adminUser, 'admin')->get(route('admin.terms.index'));
 
