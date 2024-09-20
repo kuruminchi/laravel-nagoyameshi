@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,4 +54,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
     Route::get('terms', [Admin\TermController::class, 'index'])->name('terms.index');
     Route::get('terms/{term}/edit', [Admin\TermController::class, 'edit'])->name('terms.edit');
     Route::patch('terms/{term}', [Admin\TermController::class, 'update'])->name('terms.update');
+});
+
+
+// 一般ユーザー用ルート
+Route::group(['middleware' => 'guest:admin'], function () {
+    Route::get('home', [HomeController::class, 'index'])->name('home');
 });

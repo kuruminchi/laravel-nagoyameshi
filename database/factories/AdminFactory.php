@@ -18,8 +18,8 @@ class AdminFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => 'admin@example.com',
-            'password' => Hash::make('nagoyameshi')
+            'email' => 'admin@test.com',
+            'password' => Hash::make('test')
         ];
     }
 }
