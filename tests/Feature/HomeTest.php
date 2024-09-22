@@ -12,6 +12,8 @@ use App\Models\User;
 
 class HomeTest extends TestCase
 {
+    use RefreshDatabase;
+
     // 1.未ログインのユーザーは会員側のトップページにアクセスできる
     public function test_guest_can_access_home()
     {

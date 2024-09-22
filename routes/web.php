@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RestaurantController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\TermController;
@@ -60,4 +60,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
 // 一般ユーザー用ルート
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
+
+    Route::get('user', [UserController::class, 'index'])->name('user.index');
+    Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::patch('user/{user}', [UserController::class, 'update'])->name('user.update');
 });
