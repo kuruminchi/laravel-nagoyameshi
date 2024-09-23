@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index()
     {
         if (!Auth::check()){
-            return to_route('home');
+            return to_route('login');
         }
 
         $user = Auth::user();
