@@ -48,7 +48,7 @@ class RestaurantController extends Controller
             $total = Restaurant::where('lowest_price', '<=', $price)->count();
         } else {
             $restaurants = Restaurant::sortable($sort_query)->orderBy('created_at', 'desc')->paginate(15);
-            $total = null;
+            $total = $restaurants->total();
         }
 
         $categories = Category::all();
