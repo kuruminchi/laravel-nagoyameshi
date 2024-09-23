@@ -42,10 +42,10 @@ class UserController extends Controller
             return to_route('user.index')->with('error_message', '不正なアクセスです。');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'kana' => ['required', 'string', 'regex:/\A[ァ-ヴー\s]+\z/u', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'postal_code' => ['required', 'digits:7'],
             'address' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'digits_between:10, 11'],
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user->birthday = $request->input('birthday');
         $user->occupation = $request->input('occupation');
 
-        $user->update();
+        $user->update($validated);
 
         return to_route('user.index')->with('flash_message', '会員情報を編集しました。');
     }

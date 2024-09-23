@@ -132,34 +132,40 @@ class UserTest extends TestCase
     // 3.ログイン済みの一般ユーザーは自身の会員情報を更新できる
     public function test_user_can_update_user()
     {
-        $user = User::factory()->create();
-
-        $old_details = [
-            'id' => $user->id,
+        $user = User::factory()->create([
             'name' => 'テスト',
             'kana' => 'テスト',
             'email' => 'test@gmail.com',
-            'postal_code' => '0000000',
+            'postal_code' => 0000000,
             'address' => 'テスト',
-            'phone_number' => '00000000000',
-            'birthday' => '00000000',
+            'phone_number' => 00000000000,
+            'birthday' => 20000101,
             'occupation' => 'テスト'
-        ];
+        ]);
 
         $new_details = [
+            'name' => '新テスト',
+            'kana' => 'シンテスト',
+            'email' => 'newtest@gmail.com',
+            'postal_code' => 1000000,
+            'address' => '新テスト',
+            'phone_number' => 10000000000,
+            'birthday' => 20000101,
+            'occupation' => '新テスト'
+         ];
+
+        $response = $this->actingAs($user)->patch(route('user.update', $user->id), $new_details);
+        $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'name' => '新テスト',
             'kana' => 'シンテスト',
             'email' => 'newtest@gmail.com',
-            'postal_code' => '1000000',
+            'postal_code' => 1000000,
             'address' => '新テスト',
-            'phone_number' => '10000000000',
-            'birthday' => '10000000',
+            'phone_number' => 10000000000,
+            'birthday' => 20000101,
             'occupation' => '新テスト'
-        ];
-
-        $response = $this->actingAs($user)->patch(route('user.update', $user->id), $new_details);
-        $this->assertDatabaseHas('users', $new_details);
+        ]);
         $response->assertRedirect(route('user.index'));
     }
 
