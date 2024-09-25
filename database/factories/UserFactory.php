@@ -5,12 +5,15 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -34,6 +37,19 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'phone_number' => fake()->phoneNumber(),
         ];
+    }
+
+    public function withSubscription($plan = 'premium_plan', $stripeId = 'valid_stripe_id')
+    {
+        return $this->afterCreating(function (User $user) use ($plan, $stripeId) {
+            $user->subscriptions()->create([
+                'name' => $plan,
+                'stripe_id' => $stripeId,
+                'stripe_status' => 'active',
+                'stripe_price' => 'price_1Q2OJvCn6kb1TaWJwhjmcYCr',
+                'quantity' => 1,
+            ]);
+        });
     }
 
     /**
