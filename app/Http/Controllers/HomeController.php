@@ -12,7 +12,8 @@ class HomeController extends Controller
     // トップページ(indexアクション)
     public function index()
     {
-        $highly_rated_restaurants = Restaurant::take(6)->get();
+        // メモ：リレーション先のカラムの平均を算出したいときはwithAvgを使う。orderByの第一引数はリレーション先のテーブル名_avg_カラム名を指定する。
+        $highly_rated_restaurants = Restaurant::withAvg('reviews', 'score')->orderBy('reviews_avg_score', 'desc')->take(6)->get();
         
         $categories = Category::all();
 
