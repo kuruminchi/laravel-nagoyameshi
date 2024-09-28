@@ -20,6 +20,7 @@ class RestaurantController extends Controller
             '掲載日が新しい順' => 'created_at desc',
             '価格が安い順' => 'lowest_price asc',
             '評価が高い順' => 'rating desc',
+            '予約数が多い順' => 'popular desc',
         ];
 
         $sort_query = [];
@@ -38,6 +39,7 @@ class RestaurantController extends Controller
                 $query->where('categories.name', 'like', "%{$keyword}%");
             })->sortable($sort_query)->paginate(15);
             $total = $restaurants->total();
+
         } elseif ($category_id !== null) {
             $restaurants = Restaurant::whereHas('categories', function ($query) use ($category_id) {
                 $query->where('categories.id', '=', $category_id);
@@ -45,9 +47,11 @@ class RestaurantController extends Controller
             $total = Restaurant::whereHas('categories', function ($query) use ($category_id) {
                 $query->where('categories.id', '=', $category_id);
             })->count();
+
         } elseif ($price !== null) {
             $restaurants = Restaurant::where('lowest_price', '<=', $price)->sortable($sort_query)->paginate(15);
             $total = Restaurant::where('lowest_price', '<=', $price)->count();
+            
         } else {
             $restaurants = Restaurant::sortable($sort_query)->orderBy('created_at', 'desc')->paginate(15);
             $total = $restaurants->total();

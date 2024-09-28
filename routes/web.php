@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
 
 
 // 一般ユーザー用ルート
+// トップページ・会員情報ページ・店舗情報ページ用ルート
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
 
@@ -73,7 +75,7 @@ Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('restaurants/{restaurant}', [RestaurantController::class, 'show'])->name('restaurants.show');
 });
 
-// サブスクリプション用ルート
+// サブスクリプションページ用ルート
 Route::middleware(['guest:admin', 'auth', 'notsubscribed'])->group(function () {
     Route::get('subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
     Route::post('subscription', [SubscriptionController::class, 'store'])->name('subscription.store');
@@ -86,7 +88,7 @@ Route::middleware(['guest:admin', 'auth', 'subscribed'])->group(function () {
     Route::delete('subscription', [SubscriptionController::class, 'destroy'])->name('subscription.destroy');
 });
 
-// レビュー用ルート
+// レビューページ用ルート
 Route::get('restaurants/{restaurant}/reviews', [ReviewController::class, 'index'])->middleware(['guest:admin', 'auth'])->name('restaurants.reviews.index');
 
 Route::middleware(['guest:admin', 'auth', 'subscribed'])->group(function () {
@@ -95,4 +97,12 @@ Route::middleware(['guest:admin', 'auth', 'subscribed'])->group(function () {
     Route::get('restaurants/{restaurant}/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('restaurants.reviews.edit');
     Route::patch('restaurants/{restaurant}/reviews/{review}', [ReviewController::class, 'update'])->name('restaurants.reviews.update');
     Route::delete('restaurants/{restaurant}/reviews/{review}', [ReviewController::class, 'destroy'])->name('restaurants.reviews.destroy');
+});
+
+// 予約ページ用ルート
+Route::middleware(['guest:admin', 'auth', 'subscribed'])->group(function () {
+    Route::get('reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('restaurants/{restaurant}/reservations/create', [ReservationController::class, 'create'])->name('restaurants.reservations.create');
+    Route::post('restaurants/{restaurant}/reservations', [ReservationController::class, 'store'])->name('restaurants.reservations.store');
+    Route::delete('reservations/{reservation}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 });

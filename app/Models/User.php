@@ -56,9 +56,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role === 'admin';
     }
 
-    // 1人のユーザーは複数のレビューを作成できる(1対多)
+    // 1人のユーザーは複数のレビューを作成できる（1対多）
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    // 1人のユーザーは複数の予約をすることができる（1対多）
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }
