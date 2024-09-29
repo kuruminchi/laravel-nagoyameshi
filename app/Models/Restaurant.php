@@ -22,6 +22,12 @@ class Restaurant extends Model
         return $this->belongsToMany(RegularHoliday::class)->withTimestamps();
     }
 
+    // 店舗とユーザーの関係（多対多）
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
     // 1つの店舗に対してレビューは複数ある（1対多）
     public function reviews()
     {

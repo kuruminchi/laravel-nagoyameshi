@@ -56,6 +56,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role === 'admin';
     }
 
+    // ユーザーと店舗の関係（多対多）
+    public function favorite_restaurants()
+    {
+        return $this->belongsToMany(Restaurant::class)->withTimestamps();
+    }
+
     // 1人のユーザーは複数のレビューを作成できる（1対多）
     public function reviews()
     {
