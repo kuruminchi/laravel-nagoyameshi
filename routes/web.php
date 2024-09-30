@@ -6,9 +6,9 @@ use App\Http\Middleware\NotSubscribed;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\CompanyController;
-use App\Http\Controllers\Admin\TermController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\TermController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\ReviewController;
@@ -32,7 +32,7 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-// 管理者用ルート
+// 管理者ページ用ルート
 // prefix->URLの先頭　as->名前付きルートの先頭の設定ができます。グループ内のルートURLがadmin/home, 名前付きルートがadmin.homeになります。
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin'], function () {
     Route::get('home', [Admin\HomeController::class, 'index'])->name('home');
@@ -63,8 +63,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
 });
 
 
-// 一般ユーザー用ルート
-// トップページ・会員情報ページ・店舗情報ページ用ルート
+// 一般ユーザーページ用ルート
+// トップページ・会員情報ページ・店舗情報ページ・会社概要ページ・利用規約ページ用ルート
 Route::group(['middleware' => 'guest:admin'], function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
 
@@ -74,6 +74,10 @@ Route::group(['middleware' => 'guest:admin'], function () {
 
     Route::get('restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
     Route::get('restaurants/{restaurant}', [RestaurantController::class, 'show'])->name('restaurants.show');
+
+    Route::get('company', [CompanyController::class, 'index'])->name('company.index');
+
+    Route::get('terms', [TermController::class, 'index'])->name('terms.index');
 });
 
 // サブスクリプションページ用ルート
