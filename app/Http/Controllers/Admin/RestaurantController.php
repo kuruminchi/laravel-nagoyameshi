@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\RegularHoliday;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RestaurantController extends Controller
 {
@@ -69,11 +70,15 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
         if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('public/restaurants');
-            $restaurant->image = basename($image);
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalExtension();
+            $path = Storage::disk('s3')->put('restaurants/' . $name, file_get_contents($image));
+            $url = Storage::disk('s3')->url('restaurants/' . $name);
         } else {
             $restaurant->image = '';
         }
+
+        $restaurant->image = $url;
         
         $restaurant->save();
 
@@ -85,7 +90,7 @@ class RestaurantController extends Controller
         $regular_holiday_ids = array_filter($request->input('regular_holiday_ids', []));
         $restaurant->regular_holidays()->sync($regular_holiday_ids);
 
-        return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。');
+        return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。')->with('success', 'Image Uploaded successfully', 'file', $url);
     }
 
     /**
