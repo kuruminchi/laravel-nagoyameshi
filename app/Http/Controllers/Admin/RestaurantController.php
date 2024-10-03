@@ -70,10 +70,8 @@ class RestaurantController extends Controller
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
 
-        if( !is_null($restaurant->image) && Storage::write($restaurant->image)) {
-            $file = $restaurant['image'];
-            $path = Storage::disk('s3')->put('/public/restaurants', $file, 'public');
-            $restaurant->image = $path;       
+        if($request->hasFile('image')) {
+            $restaurant->image = Storage::disk('s3')->putFile('public/restaurants', $request->file('image'), 'public');
         } else {
             $restaurant->image = '';
         }
@@ -143,9 +141,8 @@ class RestaurantController extends Controller
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image')->store('public/restaurants');
-            $restaurant->image = basename($image);
+        if($request->hasFile('image')) {
+            $restaurant->image = Storage::disk('s3')->putFile('public/restaurants', $request->file('image'), 'public');
         } else {
             $restaurant->image = '';
         }

@@ -58,7 +58,7 @@
                     <a href="{{ route('restaurants.show', $highly_rated_restaurant) }}" class="link-dark nagoyameshi-card-link">
                         <div class="card h-100">
                             @if ($highly_rated_restaurant->image !== '')
-                                <img src="{{ asset('storage/restaurants/' . $highly_rated_restaurant->image) }}" class="card-img-top nagoyameshi-vertical-card-image">
+                                <img src="{{ Storage::disk('s3')->url($highly_rated_restaurant->image) }}" class="card-img-top nagoyameshi-vertical-card-image">
                             @else
                                 <img src="{{ asset('/images/no_image.jpg') }}" class="card-img-top nagoyameshi-vertical-card-image" alt="画像なし">
                             @endif
@@ -175,7 +175,7 @@
                     <a href="{{ route('restaurants.show', $new_restaurant) }}" class="link-dark nagoyameshi-card-link">
                         <div class="card h-100">
                             @if ($new_restaurant->image !== '')
-                                <img src="{{ $new_restaurant->image }}" class="card-img-top nagoyameshi-vertical-card-image">
+                                <img src="{{ Storage::disk('s3')->url($new_restaurant->image) }}" class="card-img-top nagoyameshi-vertical-card-image">
                             @else
                                 <img src="{{ asset('/images/no_image.jpg') }}" class="card-img-top nagoyameshi-vertical-card-image" alt="画像なし">
                             @endif
