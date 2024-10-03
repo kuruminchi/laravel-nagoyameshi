@@ -6,6 +6,16 @@
             <div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
                 <h1 class="mb-4 text-center">ログイン</h1>
 
+                <div class="row mb-1">
+                    <p class="text-danger">
+                        動作確認用アカウント
+                        <br>
+                        メールアドレス : user@example.com
+                        <br>
+                        パスワード : nagoyameshi
+                    </p>
+                </div>  
+
                 <hr class="mb-4">
 
                 @if ($errors->any())
