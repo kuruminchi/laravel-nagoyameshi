@@ -69,17 +69,15 @@ class RestaurantController extends Controller
         $restaurant->closing_time = $request->input('closing_time');
         $restaurant->seating_capacity = $request->input('seating_capacity');
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $name = time() . '.' . $image->getClientOriginalExtension();
-            $path = Storage::disk('s3')->put('restaurants/' . $name, file_get_contents($image));
-            $url = Storage::disk('s3')->url('restaurants/' . $name);
+
+        if( !is_null($restaurant->image) && Storage::write($restaurant->image)) {
+            $file = $restaurant['image'];
+            $path = Storage::disk('s3')->put('/public/restaurants', $file, 'public');
+            $restaurant->image = $path;       
         } else {
             $restaurant->image = '';
         }
-
-        $restaurant->image = $url;
-        
+       
         $restaurant->save();
 
         // メモ：array_filter=セレクトボックスで選択なしにした場合(value='')は空文字を取り除く関数
@@ -90,7 +88,7 @@ class RestaurantController extends Controller
         $regular_holiday_ids = array_filter($request->input('regular_holiday_ids', []));
         $restaurant->regular_holidays()->sync($regular_holiday_ids);
 
-        return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。')->with('success', 'Image Uploaded successfully', 'file', $url);
+        return to_route('admin.restaurants.index')->with('flash_message', '店舗を登録しました。');
     }
 
     /**
